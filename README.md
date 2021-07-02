@@ -1,4 +1,4 @@
-**Telegram Contest: Android Sticker App for Telegram**
+# **Telegram Contest: Android Sticker App for Telegram**
 
 
 Create unique stickers and import them to Telegram.
