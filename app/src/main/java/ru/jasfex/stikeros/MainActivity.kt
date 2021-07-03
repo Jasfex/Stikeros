@@ -33,4 +33,14 @@ class MainActivity : AppCompatActivity() {
         shareStickers(stickers, emojis)
     }
 
+    // TODO("Save sticker Uri in database")
+    // TODO("Pack stickers into sticker pack with emojis")
+    // TODO("Add text on sticker")
+    // TODO("Rotate and scale text")
+    // TODO("Generate random face")
+    // TODO("Build release with keystore")
+    // TODO("Upload APK")
+    // TODO("Update repository README.md")
+    // TODO("Add power point animations as Bodymovin")
+
 }
