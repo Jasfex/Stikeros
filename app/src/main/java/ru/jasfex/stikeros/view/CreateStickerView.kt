@@ -9,7 +9,6 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.ColorInt
-import kotlin.math.min
 
 class CreateStickerView @JvmOverloads constructor(
     context: Context,
@@ -18,20 +17,41 @@ class CreateStickerView @JvmOverloads constructor(
     defStyleRes: Int = 0
 ) : View(context, attrs, defStyle, defStyleRes) {
 
-    // TODO("SCALE SIZE WITH RESPECT TO 512/WIDTH")
-    val shadowSize = 10.0f
-    val shadowDx = 5.0f
-    val shadowDy = 8.66f
-    val shadowColor = Color.argb(32, 0, 0, 0)
+    val STICKER_SIDE_SIZE = 512
 
-    val shadowPaint = createPaint(shadowColor, shadowSize)
+    var SCALE = 1.0f
 
-    // TODO("SCALE SIZE WITH RESPECT TO 512/WIDTH")
-    var strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        style = Paint.Style.STROKE
-        strokeCap = Paint.Cap.ROUND
-        color = Color.argb(255, 251, 251, 251)
-        strokeWidth = 5.0f * 4
+    var PAINT_SIZE = 10.0f
+
+    val SHADOW_SIZE get() = PAINT_SIZE
+    val SHADOW_SHIFT = 10.0f
+    val SHADOW_DX = 0.5f
+    val SHADOW_DY = 0.866f
+    val SHADOW_COLOR = Color.argb(32, 0, 0, 0)
+    var SHADOW_PAINT: Paint? = null
+
+    val STROKE_BORDER_SIZE = 10.0f
+    val STROKE_SIZE get() = PAINT_SIZE + STROKE_BORDER_SIZE * SCALE
+    val STROKE_COLOR = Color.argb(255, 251, 251, 251)
+    var STROKE_PAINT: Paint? = null
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        if (w > 0) {
+            SCALE = w.toFloat() / STICKER_SIDE_SIZE.toFloat()
+            SHADOW_PAINT = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                style = Paint.Style.STROKE
+                strokeCap = Paint.Cap.ROUND
+                color = SHADOW_COLOR
+                strokeWidth = SHADOW_SIZE
+            }
+            STROKE_PAINT = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                style = Paint.Style.STROKE
+                strokeCap = Paint.Cap.ROUND
+                color = STROKE_COLOR
+                strokeWidth = STROKE_SIZE
+            }
+        }
+        super.onSizeChanged(w, h, oldw, oldh)
     }
 
     private sealed class Shape {
@@ -41,7 +61,8 @@ class CreateStickerView @JvmOverloads constructor(
     private class Layer(
         val shape: Shape,
         val paint: Paint,
-        val strokePaint: Paint
+        val strokePaint: Paint,
+        val shadowPaint: Paint
     )
 
     private fun createPaint(@ColorInt paintColor: Int, radius: Float): Paint {
@@ -51,11 +72,11 @@ class CreateStickerView @JvmOverloads constructor(
             color = paintColor
             strokeWidth = radius
             strokeCap = Paint.Cap.ROUND
-            strokeJoin = Paint.Join.ROUND
+            strokeJoin = Paint.Join.MITER
         }
     }
 
-    private var paint = createPaint(Color.BLACK, 10.0f)
+    private var paint = createPaint(Color.BLACK, PAINT_SIZE)
     private val layers = mutableListOf<Layer>()
 
     fun setPaintColor(color: Int) {
@@ -64,13 +85,20 @@ class CreateStickerView @JvmOverloads constructor(
     }
 
     fun setPaintSize(size: Int) {
+        PAINT_SIZE = size.toFloat()
         paint = createPaint(paint.color, size.toFloat())
 
-        strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        SHADOW_PAINT = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             style = Paint.Style.STROKE
             strokeCap = Paint.Cap.ROUND
-            color = Color.argb(255, 0, 251, 0)
-            strokeWidth = size + 10.0f
+            color = SHADOW_COLOR
+            strokeWidth = SHADOW_SIZE
+        }
+        STROKE_PAINT = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            style = Paint.Style.STROKE
+            strokeCap = Paint.Cap.ROUND
+            color = STROKE_COLOR
+            strokeWidth = STROKE_SIZE
         }
         invalidate()
     }
@@ -80,15 +108,13 @@ class CreateStickerView @JvmOverloads constructor(
     fun popLayer() {
         layers.removeLastOrNull()
         invalidate()
-        println("SALAM layers.size = ${layers.size}")
     }
 
-    // TODO("RESIZE STICKER TO 512x512")
     fun getBitmap(): Bitmap {
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         draw(canvas)
-        return bitmap
+        return Bitmap.createScaledBitmap(bitmap, STICKER_SIDE_SIZE, STICKER_SIDE_SIZE, true)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -96,14 +122,12 @@ class CreateStickerView @JvmOverloads constructor(
             MotionEvent.ACTION_DOWN -> {
                 path = android.graphics.Path()
                 path.moveTo(event.x, event.y)
-                layers.add(Layer(Shape.Path(path), paint, strokePaint))
+                layers.add(Layer(Shape.Path(path), paint, STROKE_PAINT!!, SHADOW_PAINT!!))
                 true
             }
             MotionEvent.ACTION_MOVE -> {
                 layers.lastOrNull()?.let {
-                    (it.shape as? Shape.Path)?.let {
-                        it.path.lineTo(event.x, event.y)
-                    }
+                    (it.shape as? Shape.Path)?.path?.lineTo(event.x, event.y)
                 }
                 invalidate()
                 true
@@ -117,7 +141,7 @@ class CreateStickerView @JvmOverloads constructor(
     }
 
     override fun onDraw(canvas: Canvas) {
-        drawShadows(canvas) // TODO("fix shadows")
+        drawShadows(canvas)
         drawStrokes(canvas)
         drawLayers(canvas)
         invalidate()
@@ -128,9 +152,11 @@ class CreateStickerView @JvmOverloads constructor(
             when (layer.shape) {
                 is Shape.Path -> {
                     val path = layer.shape.path
-                    path.offset(shadowDx, shadowDy)
-                    canvas.drawPath(layer.shape.path, shadowPaint)
-                    path.offset(-shadowDx, -shadowDy)
+                    val dx = SHADOW_SHIFT * SHADOW_DX * SCALE
+                    val dy = SHADOW_SHIFT * SHADOW_DY * SCALE
+                    path.offset(dx, dy)
+                    canvas.drawPath(layer.shape.path, layer.shadowPaint)
+                    path.offset(-dx, -dy)
                 }
             }
         }
@@ -157,4 +183,3 @@ class CreateStickerView @JvmOverloads constructor(
     }
 
 }
-
