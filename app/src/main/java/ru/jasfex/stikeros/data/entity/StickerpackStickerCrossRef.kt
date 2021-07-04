@@ -7,23 +7,23 @@ import androidx.room.ForeignKey.CASCADE
 
 @Entity(
     tableName = "sticker_stickerpack_cross_ref",
-    primaryKeys = ["s_uid", "sp_uid"],
+    primaryKeys = ["stickerpackUid", "stickerUid"],
     foreignKeys = [
         ForeignKey(
             entity = Stickerpack::class,
-            parentColumns = ["uid"],
-            childColumns = ["sp_uid"],
+            parentColumns = ["stickerpackUid"],
+            childColumns = ["stickerpackUid"],
             onDelete = CASCADE
         ),
         ForeignKey(
             entity = Sticker::class,
-            parentColumns = ["uid"],
-            childColumns = ["s_uid"],
+            parentColumns = ["stickerUid"],
+            childColumns = ["stickerUid"],
             onDelete = CASCADE
         )
     ]
 )
 data class StickerpackStickerCrossRef(
-    @ColumnInfo(name = "sp_uid") val stickerpackUid: Long,
-    @ColumnInfo(name = "s_uid") val stickerUid: Long
+    @ColumnInfo(name = "stickerpackUid") val stickerpackUid: Long,
+    @ColumnInfo(name = "stickerUid") val stickerUid: Long
 )

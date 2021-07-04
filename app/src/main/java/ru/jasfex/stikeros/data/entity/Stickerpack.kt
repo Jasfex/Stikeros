@@ -5,6 +5,6 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "stickerpacks")
 data class Stickerpack(
-    @PrimaryKey(autoGenerate = true) val uid: Long = 0L,
+    @PrimaryKey(autoGenerate = true) val stickerpackUid: Long = 0L,
     val name: String
 )

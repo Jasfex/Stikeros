@@ -10,8 +10,8 @@ import ru.jasfex.stikeros.data.entity.StickerpackStickerCrossRef
 data class StickerpackWithStickers(
     @Embedded val stickerpack: Stickerpack,
     @Relation(
-        parentColumn = "uid",
-        entityColumn = "uid",
+        parentColumn = "stickerpackUid",
+        entityColumn = "stickerUid",
         associateBy = Junction(StickerpackStickerCrossRef::class)
     )
     val stickers: List<Sticker>

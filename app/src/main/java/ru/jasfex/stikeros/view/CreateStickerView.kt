@@ -41,12 +41,14 @@ class CreateStickerView @JvmOverloads constructor(
             SHADOW_PAINT = Paint(Paint.ANTI_ALIAS_FLAG).apply {
                 style = Paint.Style.STROKE
                 strokeCap = Paint.Cap.ROUND
+                strokeJoin = Paint.Join.ROUND
                 color = SHADOW_COLOR
                 strokeWidth = SHADOW_SIZE
             }
             STROKE_PAINT = Paint(Paint.ANTI_ALIAS_FLAG).apply {
                 style = Paint.Style.STROKE
                 strokeCap = Paint.Cap.ROUND
+                strokeJoin = Paint.Join.ROUND
                 color = STROKE_COLOR
                 strokeWidth = STROKE_SIZE
             }
@@ -72,7 +74,7 @@ class CreateStickerView @JvmOverloads constructor(
             color = paintColor
             strokeWidth = radius
             strokeCap = Paint.Cap.ROUND
-            strokeJoin = Paint.Join.MITER
+            strokeJoin = Paint.Join.ROUND
         }
     }
 
@@ -91,12 +93,14 @@ class CreateStickerView @JvmOverloads constructor(
         SHADOW_PAINT = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             style = Paint.Style.STROKE
             strokeCap = Paint.Cap.ROUND
+            strokeJoin = Paint.Join.ROUND
             color = SHADOW_COLOR
             strokeWidth = SHADOW_SIZE
         }
         STROKE_PAINT = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             style = Paint.Style.STROKE
             strokeCap = Paint.Cap.ROUND
+            strokeJoin = Paint.Join.ROUND
             color = STROKE_COLOR
             strokeWidth = STROKE_SIZE
         }

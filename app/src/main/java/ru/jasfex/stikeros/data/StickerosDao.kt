@@ -8,7 +8,7 @@ import ru.jasfex.stikeros.data.entity.relation.StickerpackWithStickers
 @Dao
 interface StickerosDao {
 
-    @Query("SELECT * FROM stickers WHERE uid = :uid")
+    @Query("SELECT * FROM stickers WHERE stickerUid = :uid")
     fun getSticker(uid: Long): Sticker
 
     @Query("SELECT * FROM stickers")
@@ -20,11 +20,11 @@ interface StickerosDao {
     @Delete(entity = Sticker::class)
     suspend fun deleteSticker(sticker: Sticker)
 
-    @Query("DELETE FROM stickers WHERE uid = :uid")
+    @Query("DELETE FROM stickers WHERE stickerUid = :uid")
     suspend fun deleteSticker(uid: Long)
 
 
-    @Query("SELECT * FROM stickerpacks WHERE uid = :uid")
+    @Query("SELECT * FROM stickerpacks WHERE stickerpackUid = :uid")
     fun getStickerpack(uid: Long): Stickerpack
 
     @Query("SELECT * FROM stickerpacks")
@@ -36,7 +36,7 @@ interface StickerosDao {
     @Delete(entity = Stickerpack::class)
     suspend fun deleteStickerpack(stickerpack: Stickerpack)
 
-    @Query("DELETE FROM stickerpacks WHERE uid = :uid")
+    @Query("DELETE FROM stickerpacks WHERE stickerpackUid = :uid")
     suspend fun deleteStickerpack(uid: Long)
 
 

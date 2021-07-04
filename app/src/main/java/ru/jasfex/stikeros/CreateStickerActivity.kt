@@ -7,11 +7,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import ru.jasfex.stikeros.domain.saveSticker
+import ru.jasfex.stikeros.domain.shareStickers
 import ru.jasfex.stikeros.view.ColorPickerView
 import ru.jasfex.stikeros.view.CreateStickerView
 import ru.jasfex.stikeros.view.SizePickerView
 
 class CreateStickerActivity : AppCompatActivity() {
+
+    private val viewModel = CreateStickerViewModel()
 
     private lateinit var stickerView: CreateStickerView
     private lateinit var selectedColor: View
@@ -43,7 +47,7 @@ class CreateStickerActivity : AppCompatActivity() {
     private fun configureBtnShare() {
         btnShare.setOnClickListener {
             val stickerBitmap = stickerView.getBitmap()
-            val stickerUri = saveSticker("xyi", stickerBitmap)
+            val stickerUri = saveSticker(stickerBitmap, viewModel::onSaveSticker)
 
             val stickers = ArrayList<Uri>()
             val emojis = ArrayList<String>()

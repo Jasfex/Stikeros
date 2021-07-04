@@ -1,4 +1,4 @@
-package ru.jasfex.stikeros
+package ru.jasfex.stikeros.domain
 
 import android.app.Activity
 import android.content.Intent
