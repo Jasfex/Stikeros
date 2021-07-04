@@ -17,16 +17,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Stikeros">
-        <activity android:name=".CreateStickerActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity">
-
-        </activity>
+        <activity android:name=".create_sticker.CreateStickerActivity" />
+        <activity android:name=".create_stickerpack.CreateStickerPackActivity" />
+        <activity android:name=".share_stickerpack.ShareStickerpackActivity" />
     </application>
 
 </manifest>

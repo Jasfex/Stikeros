@@ -1,14 +1,14 @@
-package ru.jasfex.stikeros
+package ru.jasfex.stikeros.create_sticker
 
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.Toast
+import ru.jasfex.stikeros.R
 import ru.jasfex.stikeros.domain.saveSticker
-import ru.jasfex.stikeros.domain.shareStickers
 import ru.jasfex.stikeros.view.ColorPickerView
 import ru.jasfex.stikeros.view.CreateStickerView
 import ru.jasfex.stikeros.view.SizePickerView
@@ -22,7 +22,7 @@ class CreateStickerActivity : AppCompatActivity() {
     private lateinit var colorPicker: ColorPickerView
     private lateinit var sizePicker: SizePickerView
     private lateinit var btnUndo: Button
-    private lateinit var btnShare: Button
+    private lateinit var btnSave: Button
 
     private fun initViews() {
         stickerView = findViewById(R.id.sticker)
@@ -30,10 +30,10 @@ class CreateStickerActivity : AppCompatActivity() {
         colorPicker = findViewById(R.id.color_picker)
         sizePicker = findViewById(R.id.size_picker)
         btnUndo = findViewById(R.id.btn_undo)
-        btnShare = findViewById(R.id.btn_share)
+        btnSave = findViewById(R.id.btn_save)
 
         configureBtnUndo()
-        configureBtnShare()
+        configureBtnSave()
         configureColorPicker(stickerView::setPaintColor, sizePicker::setColor, selectedColor)
         configureSizePicker(stickerView::setPaintSize)
     }
@@ -44,18 +44,19 @@ class CreateStickerActivity : AppCompatActivity() {
         }
     }
 
-    private fun configureBtnShare() {
-        btnShare.setOnClickListener {
+    private fun configureBtnSave() {
+        btnSave.setOnClickListener {
             val stickerBitmap = stickerView.getBitmap()
             val stickerUri = saveSticker(stickerBitmap, viewModel::onSaveSticker)
+            Toast.makeText(this, "Sticker saved at $stickerUri", Toast.LENGTH_SHORT).show()
 
-            val stickers = ArrayList<Uri>()
-            val emojis = ArrayList<String>()
-
-            stickers.add(stickerUri)
-            emojis.add(Emojis[0])
-
-            shareStickers(stickers, emojis)
+//            val stickers = ArrayList<Uri>()
+//            val emojis = ArrayList<String>()
+//
+//            stickers.add(stickerUri)
+//            emojis.add(Emojis[0])
+//
+//            shareStickers(stickers, emojis)
         }
     }
 

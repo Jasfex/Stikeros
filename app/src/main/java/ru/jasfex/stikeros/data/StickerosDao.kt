@@ -1,8 +1,10 @@
 package ru.jasfex.stikeros.data
 
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 import ru.jasfex.stikeros.data.entity.Sticker
 import ru.jasfex.stikeros.data.entity.Stickerpack
+import ru.jasfex.stikeros.data.entity.StickerpackStickerCrossRef
 import ru.jasfex.stikeros.data.entity.relation.StickerpackWithStickers
 
 @Dao
@@ -13,6 +15,9 @@ interface StickerosDao {
 
     @Query("SELECT * FROM stickers")
     fun getStickers(): List<Sticker>
+
+    @Query("SELECT * FROM stickers")
+    fun getStickersFlow(): Flow<List<Sticker>>
 
     @Insert(entity = Sticker::class)
     suspend fun saveSticker(sticker: Sticker)
@@ -31,13 +36,23 @@ interface StickerosDao {
     fun getStickerpacks(): List<Stickerpack>
 
     @Insert(entity = Stickerpack::class)
-    suspend fun saveStickerpack(stickerpack: Stickerpack)
+    suspend fun saveStickerpack(stickerpack: Stickerpack): Long
 
     @Delete(entity = Stickerpack::class)
     suspend fun deleteStickerpack(stickerpack: Stickerpack)
 
     @Query("DELETE FROM stickerpacks WHERE stickerpackUid = :uid")
     suspend fun deleteStickerpack(uid: Long)
+
+
+    @Query("SELECT * FROM sticker_stickerpack_cross_ref")
+    fun getCrossRefs(): List<StickerpackStickerCrossRef>
+
+    @Insert(entity = StickerpackStickerCrossRef::class)
+    fun saveCrossRefs(crossRef: StickerpackStickerCrossRef)
+
+    @Delete(entity = StickerpackStickerCrossRef::class)
+    fun deleteCrossRefs(crossRef: StickerpackStickerCrossRef)
 
 
     @Transaction

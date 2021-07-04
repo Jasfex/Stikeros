@@ -6,9 +6,11 @@ import ru.jasfex.stikeros.data.StickerosDatabase
 
 class StickerosApp : Application() {
 
-    val stickerosDao: StickerosDao by lazy {
-        val database = StickerosDatabase.getInstance(this)
-        database.stickerosDao()
-    }
+    lateinit var  stickerosDao: StickerosDao
 
+    override fun onCreate() {
+        super.onCreate()
+        val database = StickerosDatabase.getInstance(this)
+        stickerosDao = database.stickerosDao()
+    }
 }
