@@ -4,18 +4,14 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import ru.jasfex.stikeros.data.entity.Sticker
-import ru.jasfex.stikeros.data.entity.Stickerpack
-import ru.jasfex.stikeros.data.entity.StickerpackStickerCrossRef
 
 @Database(
-    entities = [Sticker::class, Stickerpack::class, StickerpackStickerCrossRef::class],
+    entities = [StickerEntity::class, StickerPackEntity::class, StickersCrossRef::class],
     version = 1,
     exportSchema = false
 )
 abstract class StickerAppDatabase : RoomDatabase() {
-
-    abstract fun stickerDao(): StickerosDao
+    abstract fun stickerAppDao(): StickerAppDao
 
     companion object {
         @Volatile
@@ -26,10 +22,8 @@ abstract class StickerAppDatabase : RoomDatabase() {
                 INSTANCE ?: Room.databaseBuilder(
                     context.applicationContext,
                     StickerAppDatabase::class.java,
-                    "stickeros.db"
-                ).build().also {
-                    INSTANCE = it
-                }
+                    "sticker-app-db"
+                ).build().also { INSTANCE = it }
             }
         }
     }

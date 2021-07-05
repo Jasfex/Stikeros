@@ -21,8 +21,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".create_sticker.CreateStickerActivity" />
-        <activity android:name=".create_stickerpack.CreateStickerPackActivity" />
-        <activity android:name=".share_stickerpack.ShareStickerpackActivity" />
     </application>
 
 </manifest>

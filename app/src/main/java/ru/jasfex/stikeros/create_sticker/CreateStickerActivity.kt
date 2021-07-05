@@ -18,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.jasfex.stikeros.R
 import ru.jasfex.stikeros.StickerApp
+import ru.jasfex.stikeros.data.StickerEntity
 import java.io.FileOutputStream
 
 class CreateStickerActivity : AppCompatActivity() {
@@ -68,9 +69,8 @@ class CreateStickerActivity : AppCompatActivity() {
             val stickerEmoji = emoji.text.toString()
             saveSticker(stickerBitmap, stickerEmoji) { sUri, sEmoji ->
                 ioScope.launch {
-                    // TODO()
-                    // val stickerEntity = StickerEntity(uri = sUri, emoji = sEmoji)
-                    // app.stickerDao.saveSticker(stickerEntity)
+                    val stickerEntity = StickerEntity(uri = sUri, emoji = sEmoji)
+                    app.stickerAppDao.saveSticker(stickerEntity)
                 }
             }
         }

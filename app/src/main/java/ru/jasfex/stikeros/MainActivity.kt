@@ -18,8 +18,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.jasfex.stikeros.create_sticker.CreateStickerActivity
-import ru.jasfex.stikeros.create_stickerpack.CreateStickerPackActivity
-import ru.jasfex.stikeros.share_stickerpack.ShareStickerpackActivity
 
 
 class MainActivity : AppCompatActivity() {
@@ -62,8 +60,8 @@ class MainActivity : AppCompatActivity() {
         btnCreateStickerPack = findViewById(R.id.btn_create_sticker_pack)!!
         btnShareStickerPack = findViewById(R.id.btn_share_sticker_pack)!!
         bindDestination(btnCreateSticker, CreateStickerActivity::class.java)
-        bindDestination(btnCreateStickerPack, CreateStickerPackActivity::class.java)
-        bindDestination(btnShareStickerPack, ShareStickerpackActivity::class.java)
+//        bindDestination(btnCreateStickerPack, CreateStickerPackActivity::class.java)
+//        bindDestination(btnShareStickerPack, ShareStickerPackActivity::class.java)
 
         permissionContainer = findViewById(R.id.permission_container)!!
         tvPermissionRationale = findViewById(R.id.tv_permission_rationale)!!
