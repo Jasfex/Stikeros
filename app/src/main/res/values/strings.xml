@@ -6,4 +6,8 @@
     <string name="share_sticker_pack">Share Sticker Pack</string>
     <string name="permission_rationale">App requires storage permission for saving stickers</string>
     <string name="provide_permission">Provide permission</string>
+    <string name="save_sticker">Save Sticker</string>
+    <string name="undo">Undo</string>
+    <string name="set_previous_emoji">Set previous emoji</string>
+    <string name="set_next_emoji">Set next emoji</string>
 </resources>

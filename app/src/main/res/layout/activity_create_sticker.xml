@@ -15,7 +15,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <StickerCanvasView
+        <ru.jasfex.stikeros.create_sticker.StickerCanvasView
             android:id="@+id/sticker_canvas"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
@@ -35,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="32dp" />
 
-        <ColorPickerView
+        <ru.jasfex.stikeros.create_sticker.ColorPickerView
             android:id="@+id/color_picker"
             android:layout_width="match_parent"
             android:layout_height="32dp" />
@@ -50,7 +50,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/color_picker_container">
 
-        <SizePickerView
+        <ru.jasfex.stikeros.create_sticker.SizePickerView
             android:id="@+id/size_picker"
             android:layout_width="match_parent"
             android:layout_height="32dp" />
