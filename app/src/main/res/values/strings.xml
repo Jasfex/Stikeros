@@ -10,4 +10,7 @@
     <string name="undo">Undo</string>
     <string name="set_previous_emoji">Set previous emoji</string>
     <string name="set_next_emoji">Set next emoji</string>
+    <string name="sticker_preview">Sticker preview</string>
+    <string name="sticker_pack_name">Sticker Pack Name</string>
+    <string name="save_sticker_pack">Save Sticker Pack</string>
 </resources>
