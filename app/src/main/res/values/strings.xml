@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Stikeros</string>
     <string name="sticker">sticker</string>
+    <string name="create_sticker">Create Sticker</string>
+    <string name="create_sticker_pack">Create Sticker Pack</string>
+    <string name="share_sticker_pack">Share Sticker Pack</string>
+    <string name="permission_rationale">App requires storage permission for saving stickers</string>
+    <string name="provide_permission">Provide permission</string>
 </resources>

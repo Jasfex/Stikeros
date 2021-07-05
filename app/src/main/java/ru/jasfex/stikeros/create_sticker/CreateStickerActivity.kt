@@ -25,12 +25,12 @@ class CreateStickerActivity : AppCompatActivity() {
     private lateinit var btnSave: Button
 
     private fun initViews() {
-        stickerView = findViewById(R.id.sticker)
-        selectedColor = findViewById(R.id.selected_color)
-        colorPicker = findViewById(R.id.color_picker)
-        sizePicker = findViewById(R.id.size_picker)
-        btnUndo = findViewById(R.id.btn_undo)
-        btnSave = findViewById(R.id.btn_save)
+        stickerView = findViewById(R.id.sticker)!!
+        selectedColor = findViewById(R.id.selected_color)!!
+        colorPicker = findViewById(R.id.color_picker)!!
+        sizePicker = findViewById(R.id.size_picker)!!
+        btnUndo = findViewById(R.id.btn_undo)!!
+        btnSave = findViewById(R.id.btn_save)!!
 
         configureBtnUndo()
         configureBtnSave()

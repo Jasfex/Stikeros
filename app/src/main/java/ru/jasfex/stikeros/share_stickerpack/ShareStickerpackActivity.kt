@@ -17,7 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.jasfex.stikeros.R
-import ru.jasfex.stikeros.StickerosApp
+import ru.jasfex.stikeros.StickerApp
 import ru.jasfex.stikeros.data.entity.relation.StickerpackWithStickers
 import ru.jasfex.stikeros.domain.shareStickers
 import java.io.FileInputStream
@@ -91,7 +91,7 @@ class ShareStickerpackActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_share_stickerpack)
 
-        viewModel = ShareStickerpackViewModel((application as StickerosApp).stickerosDao)
+        viewModel = ShareStickerpackViewModel((application as StickerApp).stickerDao)
         adapter = Adapter {
             val stickers = ArrayList<Uri>()
             val emojis = ArrayList<String>()

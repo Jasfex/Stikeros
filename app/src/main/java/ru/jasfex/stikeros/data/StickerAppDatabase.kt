@@ -13,19 +13,19 @@ import ru.jasfex.stikeros.data.entity.StickerpackStickerCrossRef
     version = 1,
     exportSchema = false
 )
-abstract class StickerosDatabase : RoomDatabase() {
+abstract class StickerAppDatabase : RoomDatabase() {
 
-    abstract fun stickerosDao(): StickerosDao
+    abstract fun stickerDao(): StickerosDao
 
     companion object {
         @Volatile
-        private var INSTANCE: StickerosDatabase? = null
+        private var INSTANCE: StickerAppDatabase? = null
 
-        fun getInstance(context: Context): StickerosDatabase {
+        fun getInstance(context: Context): StickerAppDatabase {
             return INSTANCE ?: synchronized(this) {
                 INSTANCE ?: Room.databaseBuilder(
                     context.applicationContext,
-                    StickerosDatabase::class.java,
+                    StickerAppDatabase::class.java,
                     "stickeros.db"
                 ).build().also {
                     INSTANCE = it

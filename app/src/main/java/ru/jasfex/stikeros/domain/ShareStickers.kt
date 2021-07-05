@@ -14,6 +14,7 @@ fun Activity.shareStickers(stickers: ArrayList<Uri>, emojis: ArrayList<String>) 
     intent.putExtra(CREATE_STICKER_PACK_IMPORTER_EXTRA, packageName)
     intent.putExtra(CREATE_STICKER_PACK_EMOJIS_EXTRA, emojis)
     intent.type = "image/*"
+    println("SALAM $intent $stickers $emojis $packageName")
     try {
         startActivity(intent)
     } catch (e: Exception) {

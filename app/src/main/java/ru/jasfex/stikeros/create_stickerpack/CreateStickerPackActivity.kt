@@ -19,7 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.jasfex.stikeros.R
-import ru.jasfex.stikeros.StickerosApp
+import ru.jasfex.stikeros.StickerApp
 import ru.jasfex.stikeros.data.entity.Sticker
 import java.io.FileInputStream
 
@@ -114,7 +114,7 @@ class CreateStickerPackActivity : AppCompatActivity() {
         val viewModel: CreateStickerPackViewModel by viewModels {
             object : ViewModelProvider.Factory {
                 override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                    return CreateStickerPackViewModel((application as StickerosApp).stickerosDao) as T
+                    return CreateStickerPackViewModel((application as StickerApp).stickerDao) as T
                 }
             }
         }
@@ -123,7 +123,7 @@ class CreateStickerPackActivity : AppCompatActivity() {
 
         etStickerpackName = findViewById(R.id.et_stickerpack_name)
         rvStickers = findViewById(R.id.rv_stickers)
-        btnCreateStickerpack = findViewById(R.id.btn_create_stickerpack)
+        btnCreateStickerpack = findViewById(R.id.btn_create_sticker_pack)
 
         etStickerpackName.setText(generateStickerPackName())
 
