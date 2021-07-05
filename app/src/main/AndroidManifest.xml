@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Stikeros">
-        <activity android:name=".create_sticker_pack.CreateStickerPackActivity"></activity>
+        <activity android:name=".share_sticker_pack.ShareStickerPackActivity"></activity>
+        <activity android:name=".create_sticker_pack.CreateStickerPackActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

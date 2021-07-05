@@ -13,4 +13,5 @@
     <string name="sticker_preview">Sticker preview</string>
     <string name="sticker_pack_name">Sticker Pack Name</string>
     <string name="save_sticker_pack">Save Sticker Pack</string>
+    <string name="share_description">Click on sticker pack for sharing it on Telegram</string>
 </resources>

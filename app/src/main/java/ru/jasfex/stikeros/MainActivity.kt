@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.jasfex.stikeros.create_sticker.CreateStickerActivity
 import ru.jasfex.stikeros.create_sticker_pack.CreateStickerPackActivity
+import ru.jasfex.stikeros.share_sticker_pack.ShareStickerPackActivity
 
 
 class MainActivity : AppCompatActivity() {
@@ -62,7 +63,7 @@ class MainActivity : AppCompatActivity() {
         btnShareStickerPack = findViewById(R.id.btn_share_sticker_pack)!!
         bindDestination(btnCreateSticker, CreateStickerActivity::class.java)
         bindDestination(btnCreateStickerPack, CreateStickerPackActivity::class.java)
-//        bindDestination(btnShareStickerPack, ShareStickerPackActivity::class.java)
+        bindDestination(btnShareStickerPack, ShareStickerPackActivity::class.java)
 
         permissionContainer = findViewById(R.id.permission_container)!!
         tvPermissionRationale = findViewById(R.id.tv_permission_rationale)!!
