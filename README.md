@@ -6,7 +6,7 @@
 
 **Drawing Features:**
 1. Load photo (*not supported yet*)
-2. Draw picture using brush (*not supported yet*)
+2. Draw picture using brush
 3. Add text (*not supported yet*)
 4. Add basic geometric shapes (*not supported yet*)
 5. Generate random face (*not supported yet*)
