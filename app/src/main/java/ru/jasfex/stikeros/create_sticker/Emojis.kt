@@ -1,4 +1,4 @@
-package ru.jasfex.stikeros
+package ru.jasfex.stikeros.create_sticker
 
 val Emojis: List<String> = listOf(
     "\uD83D\uDE02",

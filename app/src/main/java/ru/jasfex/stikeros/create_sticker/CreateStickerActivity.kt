@@ -1,70 +1,96 @@
 package ru.jasfex.stikeros.create_sticker
 
+import android.content.ContentValues
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import ru.jasfex.stikeros.R
-import ru.jasfex.stikeros.domain.saveSticker
-import ru.jasfex.stikeros.view.ColorPickerView
-import ru.jasfex.stikeros.view.CreateStickerView
-import ru.jasfex.stikeros.view.SizePickerView
+import ru.jasfex.stikeros.StickerApp
+import java.io.FileOutputStream
 
 class CreateStickerActivity : AppCompatActivity() {
 
-    private val viewModel = CreateStickerViewModel()
+    private val initialBrushColor = Color.BLUE
+    private val initialBrushSize = 20.0f
 
-    private lateinit var stickerView: CreateStickerView
-    private lateinit var selectedColor: View
-    private lateinit var colorPicker: ColorPickerView
-    private lateinit var sizePicker: SizePickerView
-    private lateinit var btnUndo: Button
-    private lateinit var btnSave: Button
+    private val app: StickerApp get() = application as StickerApp
 
-    private fun initViews() {
-        stickerView = findViewById(R.id.sticker)!!
-        selectedColor = findViewById(R.id.selected_color)!!
-        colorPicker = findViewById(R.id.color_picker)!!
-        sizePicker = findViewById(R.id.size_picker)!!
-        btnUndo = findViewById(R.id.btn_undo)!!
-        btnSave = findViewById(R.id.btn_save)!!
+    private val ioScope = CoroutineScope(Dispatchers.IO)
 
-        configureBtnUndo()
-        configureBtnSave()
-        configureColorPicker(stickerView::setPaintColor, sizePicker::setColor, selectedColor)
-        configureSizePicker(stickerView::setPaintSize)
-    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_create_sticker)
 
-    private fun configureBtnUndo() {
+        val stickerCanvas = findViewById<StickerCanvasView>(R.id.sticker_canvas)!!
+        val brushColor = findViewById<View>(R.id.brush_color)!!
+        val colorPicker = findViewById<ColorPickerView>(R.id.color_picker)!!
+        val sizePicker = findViewById<SizePickerView>(R.id.size_picker)!!
+        val emoji = findViewById<TextView>(R.id.tv_emoji)!!
+        val btnPrevEmoji = findViewById<ImageButton>(R.id.btn_prev_emoji)!!
+        val btnNextEmoji = findViewById<ImageButton>(R.id.btn_next_emoji)!!
+        val btnUndo = findViewById<Button>(R.id.btn_undo)!!
+        val btnSaveSticker = findViewById<Button>(R.id.btn_save_sticker)!!
+
+        setupStickerCanvas(stickerCanvas)
+        setupBrushColor(brushColor)
+        setupColorPicker(colorPicker)
+        setupSizePicker(sizePicker)
+        setupEmoji(emoji, btnPrevEmoji, btnNextEmoji)
+
+        colorPicker.setOnColorPickedListener { color ->
+            stickerCanvas.setBrushColor(color)
+            brushColor.setBackgroundColor(color)
+            sizePicker.setPointerColor(color)
+        }
+
+        sizePicker.setOnSizePickedListener { size ->
+            stickerCanvas.setBrushSize(size)
+        }
+
         btnUndo.setOnClickListener {
-            stickerView.popLayer()
+            stickerCanvas.onDeleteLastLayer()
+        }
+
+        btnSaveSticker.setOnClickListener {
+            val stickerBitmap = stickerCanvas.generateBitmap()
+            val stickerEmoji = emoji.text.toString()
+            saveSticker(stickerBitmap, stickerEmoji) { sUri, sEmoji ->
+                ioScope.launch {
+                    // TODO()
+                    // val stickerEntity = StickerEntity(uri = sUri, emoji = sEmoji)
+                    // app.stickerDao.saveSticker(stickerEntity)
+                }
+            }
         }
     }
 
-    private fun configureBtnSave() {
-        btnSave.setOnClickListener {
-            val stickerBitmap = stickerView.getBitmap()
-            val stickerUri = saveSticker(stickerBitmap, viewModel::onSaveSticker)
-            Toast.makeText(this, "Sticker saved at $stickerUri", Toast.LENGTH_SHORT).show()
-
-//            val stickers = ArrayList<Uri>()
-//            val emojis = ArrayList<String>()
-//
-//            stickers.add(stickerUri)
-//            emojis.add(Emojis[0])
-//
-//            shareStickers(stickers, emojis)
-        }
+    private fun setupStickerCanvas(stickerCanvas: StickerCanvasView) {
+        stickerCanvas.setBrushColor(initialBrushColor)
+        stickerCanvas.setBrushSize(initialBrushSize)
     }
 
-    private fun configureColorPicker(
-        setPaintColor: (color: Int) -> Unit,
-        setSizePaintColor: (color: Int) -> Unit,
-        selectedColor: View
-    ) {
+    private fun setupSizePicker(sizePicker: SizePickerView) {
+        sizePicker.setPointerColor(initialBrushColor)
+        sizePicker.setSize(initialBrushSize)
+    }
+
+    private fun setupBrushColor(brushColor: View) {
+        brushColor.setBackgroundColor(initialBrushColor)
+    }
+
+    private fun setupColorPicker(colorPicker: ColorPickerView) {
         val colors = intArrayOf(
             Color.BLACK,
             Color.RED,
@@ -75,31 +101,78 @@ class CreateStickerActivity : AppCompatActivity() {
             Color.CYAN,
             Color.WHITE
         )
+
         val gradient = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, colors).apply {
             shape = GradientDrawable.RECTANGLE
             gradientType = GradientDrawable.LINEAR_GRADIENT
         }
 
         colorPicker.setImageDrawable(gradient)
-        colorPicker.setOnColorPicked {
-            setPaintColor(it)
-            setSizePaintColor(it)
-            selectedColor.setBackgroundColor(it)
+    }
+
+    private fun setupEmoji(emoji: TextView, btnPrevEmoji: ImageButton, btnNextEmoji: ImageButton) {
+        emoji.text = Emojis[0]
+        btnPrevEmoji.setOnClickListener {
+            val index = Emojis.indexOf(emoji.text.toString())
+            emoji.text = if (index < 1) {
+                Emojis.last()
+            } else {
+                Emojis[index - 1]
+            }
+        }
+        btnNextEmoji.setOnClickListener {
+            val index = Emojis.indexOf(emoji.text.toString())
+            emoji.text = if (index < 0) {
+                Emojis.last()
+            } else {
+                Emojis[(index + 1) % Emojis.size]
+            }
         }
     }
 
-    private fun configureSizePicker(
-        setPaintSize: (size: Int) -> Unit
+    private fun saveSticker(
+        stickerBitmap: Bitmap,
+        stickerEmoji: String,
+        saveInDatabase: (stickerUri: String, stickerEmoji: String) -> Unit
     ) {
-        sizePicker.setOnSizePicked {
-            setPaintSize(it)
+        val resolver = applicationContext.contentResolver
+
+        val imagesCollection =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                MediaStore.Images.Media.getContentUri(
+                    MediaStore.VOLUME_EXTERNAL_PRIMARY
+                )
+            } else {
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            }
+
+        val filename = "StickerApp_" + System.currentTimeMillis().toString()
+        val imageDetails = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, filename)
+            put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                put(MediaStore.Images.Media.IS_PENDING, 1)
+            }
         }
+
+        val contentUri = resolver.insert(imagesCollection, imageDetails)!!
+
+        resolver.openFileDescriptor(contentUri, "w", null).use { pfd ->
+            FileOutputStream(pfd!!.fileDescriptor).use { fos ->
+                stickerBitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
+                fos.flush()
+            }
+        }
+
+        imageDetails.clear()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            imageDetails.put(MediaStore.Images.Media.IS_PENDING, 0)
+            resolver.update(contentUri, imageDetails, null, null)
+        }
+
+        saveInDatabase(contentUri.toString(), stickerEmoji)
+        Toast.makeText(this, "Sticker \"$contentUri\" saved!", Toast.LENGTH_SHORT).show()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_create_sticker)
-
-        initViews()
-    }
 }
